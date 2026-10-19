@@ -1,4 +1,4 @@
-# DSA01-192471025-Assignment1
+# DSA0104-192471025-Assignment1
 
 **Assignment:** Design, Implement and Validate the Fare Logic of a City Metro Smart-Card System  
 **Student:** M. Rumana Khan  
