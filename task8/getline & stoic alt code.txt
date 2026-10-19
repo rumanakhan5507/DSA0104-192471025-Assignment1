@@ -1,0 +1,18 @@
+#include <iostream>
+#include <string>
+int main() {
+   std::string line;
+   std::cout << "Enter an integer: ";
+   std::getline(std::cin, line);
+   try {
+       std::size_t used = 0;
+       int value = std::stoi(line, &used);
+       if (used != line.size()) {
+           std::cout << "Invalid: extra characters\n";
+       } else {
+           std::cout << "Value = " << value << '\n';
+       }
+   } catch (const std::exception&) {
+       std::cout << "Invalid integer\n";
+   }
+}
