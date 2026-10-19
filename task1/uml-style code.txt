@@ -1,0 +1,18 @@
+Passenger
+- passengerId: string
+- category: PassengerCategory
++ hasConcession(): bool
+Journey
+- zone: Zone
+- hour: int
+- minute: int
+- isWeekend: bool
+FarePolicy
+- baseFares: array<long long>
++ calculateFare(journey): long long
+SmartCard
+- cardId: string
+- balancePaise: long long
++ canTravel(fare): bool
++ deduct(fare): bool
++ recharge(amountPaise): bool
