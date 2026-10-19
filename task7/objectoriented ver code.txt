@@ -1,0 +1,30 @@
+#include <iostream>
+class SmartCard {
+private:
+   long long balancePaise;
+   static constexpr long long MIN_BALANCE_PAISE = 5000;
+public:
+   explicit SmartCard(long long initialBalance) : balancePaise(initialBalance) {}
+   long long balance() const { return balancePaise; }
+   bool canTravel(long long farePaise) const {
+       return farePaise >= 0 &&
+              balancePaise - farePaise >= MIN_BALANCE_PAISE;
+   }
+   bool deduct(long long farePaise) {
+       if (!canTravel(farePaise)) return false;
+       balancePaise -= farePaise;
+       return true;
+   }
+   bool recharge(long long amountPaise) {
+       if (amountPaise <= 0) return false;
+       balancePaise += amountPaise;
+       return true;
+   }
+};
+int main() {
+   SmartCard card(10000);
+   if (card.deduct(3000))
+       std::cout << "Accepted; balance paise = " << card.balance() << '\n';
+   else
+       std::cout << "Denied; balance paise = " << card.balance() << '\n';
+}
