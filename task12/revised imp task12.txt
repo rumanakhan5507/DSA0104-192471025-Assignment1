@@ -1,0 +1,77 @@
+#include <array>
+#include <iostream>
+#include <string>
+enum class Zone { Inner = 0, Middle = 1, Outer = 2, Airport = 3 };
+constexpr std::array<long long, 4> BASE_FARE_PAISE = {
+   1000, 2000, 3000, 6000
+};
+constexpr int PEAK_SURCHARGE_PERCENT = 20;
+constexpr int WEEKEND_DISCOUNT_PERCENT = 10;
+constexpr long long MIN_BALANCE_PAISE = 5000;
+bool isPeak(int hour, int minute) {
+   if (hour < 0 || hour > 23 || minute < 0 || minute > 59) return false;
+   int t = hour * 60 + minute;
+   return (t >= 8 * 60 && t < 10 * 60) ||
+          (t >= 17 * 60 && t < 20 * 60);
+}
+long long baseFare(Zone z) {
+   auto index = static_cast<int>(z);
+   if (index < 0 || index >= static_cast<int>(BASE_FARE_PAISE.size()))
+       return -1;
+   return BASE_FARE_PAISE[static_cast<std::size_t>(index)];
+}
+long long calculateFare(Zone z, int hour, int minute, bool weekend) {
+   long long base = baseFare(z);
+   if (base < 0 || hour < 0 || hour > 23 || minute < 0 || minute > 59)
+       return -1;
+   // Weekend discount takes precedence; it never stacks with peak surcharge.
+   if (weekend) {
+       return base - (base * WEEKEND_DISCOUNT_PERCENT / 100);
+   }
+   if (isPeak(hour, minute)) {
+       return base + (base * PEAK_SURCHARGE_PERCENT / 100);
+   }
+   return base;
+}
+class MonthlyPass {
+private:
+   std::array<Zone, 2> zones;
+   bool valid;
+public:
+   MonthlyPass(Zone first, Zone second, bool isValid = true)
+       : zones{first, second}, valid(isValid) {}
+   bool covers(Zone z) const {
+       return valid && (z == zones[0] || z == zones[1]);
+   }
+};
+class SmartCard {
+private:
+   long long balancePaise;
+public:
+   explicit SmartCard(long long initialBalance) : balancePaise(initialBalance) {}
+   long long balance() const { return balancePaise; }
+   bool canTravel(long long farePaise) const {
+       return farePaise >= 0 &&
+              balancePaise - farePaise >= MIN_BALANCE_PAISE;
+   }
+   bool deduct(long long farePaise) {
+       if (!canTravel(farePaise)) return false;
+       balancePaise -= farePaise;
+       return true;
+   }
+};
+int main() {
+   std::cout << "Airport weekday peak: "
+             << calculateFare(Zone::Airport, 9, 0, false) << " paise\n";
+   std::cout << "Airport weekend peak-time: "
+             << calculateFare(Zone::Airport, 9, 0, true) << " paise\n";
+   MonthlyPass pass(Zone::Inner, Zone::Middle);
+   Zone trip = Zone::Inner;
+   long long fare = pass.covers(trip)
+                  ? 0
+                  : calculateFare(trip, 12, 0, false);
+   std::cout << "Pass-covered Inner trip: " << fare << " paise\n";
+   SmartCard card(10000);
+   std::cout << "Can deduct Rs 30 while preserving Rs 50: "
+             << std::boolalpha << card.deduct(3000) << '\n';
+}

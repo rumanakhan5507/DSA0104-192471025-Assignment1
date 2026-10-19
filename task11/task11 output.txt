@@ -1,0 +1,4 @@
+Middle peak fare: 2400 paise
+Journey accepted: true
+Remaining balance: 7600 paise
+Per-journey fare calculation: O(1)

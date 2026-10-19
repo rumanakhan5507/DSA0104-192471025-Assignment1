@@ -1,0 +1,37 @@
+#include <array>
+#include <iostream>
+
+enum class Zone { Inner, Middle, Outer };
+constexpr std::array<long long, 3> FARES = {1000, 2000, 3000};
+constexpr long long MIN_BALANCE_PAISE = 5000;
+
+class FarePolicy {
+public:
+    long long calculate(Zone zone, bool peak) const {
+        const auto index = static_cast<int>(zone);
+        if (index < 0 || index >= static_cast<int>(FARES.size())) return -1;
+        const long long base = FARES[static_cast<std::size_t>(index)];
+        return peak ? base + base * 20 / 100 : base;
+    }
+};
+class SmartCard {
+private:
+    long long balancePaise;
+public:
+    explicit SmartCard(long long balance) : balancePaise(balance) {}
+    bool deduct(long long fare) {
+        if (fare < 0 || balancePaise - fare < MIN_BALANCE_PAISE) return false;
+        balancePaise -= fare;
+        return true;
+    }
+    long long balance() const { return balancePaise; }
+};
+int main() {
+    FarePolicy policy;
+    SmartCard card(10000);
+    const long long fare = policy.calculate(Zone::Middle, true);
+    std::cout << "Middle peak fare: " << fare << " paise\n";
+    std::cout << "Journey accepted: " << std::boolalpha << card.deduct(fare) << '\n';
+    std::cout << "Remaining balance: " << card.balance() << " paise\n";
+    std::cout << "Per-journey fare calculation: O(1)\n";
+}
