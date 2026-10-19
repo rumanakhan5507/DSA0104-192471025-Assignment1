@@ -1,0 +1,17 @@
+#include <iomanip>
+#include <iostream>
+#include <limits>
+int main() {
+   const long long counts[] = {20000, 500000, 3000000};
+   for (long long n : counts) {
+       long long totalPaise = n * 3000LL;
+       double totalRupees = static_cast<double>(n) * 30.0;
+       std::cout << "n=" << n
+                 << " integer paise=" << totalPaise
+                 << " rupees(double)=" << std::fixed << std::setprecision(2)
+                 << totalRupees << '\n';
+   }
+   std::cout << "INT_MAX=" << std::numeric_limits<int>::max() << '\n';
+}
+
+
