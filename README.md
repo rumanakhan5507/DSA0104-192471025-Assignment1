@@ -12,7 +12,7 @@
 This repository contains the source code and program output for each of the 12 assignment tasks. Each task has its own folder with these two files:
 
 - `main.cpp` — source code for the task.
-- `output.txt` — output produced by running the program.
+- `output.png` — output produced by running the program.
 
 ```text
 Task01/
@@ -67,7 +67,6 @@ Replace `Task01` with the relevant task folder (`Task02` through `Task12`) to co
 
 ## Notes
 
-- `output.txt` contains the recorded output for the corresponding source file.
+- `output.png` contains the recorded output for the corresponding source file.
 - All 12 source files were compiled and run successfully in the local verification environment using C++17 and the compiler flags shown above.
 - Runtime/compiler output can vary across systems. If required, compile and run the programs on your own computer before submission.
-- After uploading this project to GitHub, copy the actual repository URL into your assignment submission.
